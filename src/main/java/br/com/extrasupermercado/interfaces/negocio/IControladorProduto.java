@@ -25,4 +25,6 @@ public interface IControladorProduto
 	public List<Produto> consultarProdutosPorTipo(String tipo);
 
 	public List<Produto> consultarProdutosPorSupermercado(int supermercado);
+
+	public Produto pesquisarProdutoComParametros(String nome, String tipo, String marca);
 }

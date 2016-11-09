@@ -136,4 +136,23 @@ public class ControladorProduto implements IControladorProduto
 		}
 		return null;
 	}
+
+	@GET
+	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("/pesquisarProdutoComParametros/{nome}, {tipo}, {marca}")
+	@Override
+	public Produto pesquisarProdutoComParametros(@PathParam("nome") String nome, @PathParam("tipo") String tipo,
+			@PathParam("marca") String marca)
+	{
+		DAOFactory.abrir();
+		produtoDAO = DAOFactory.getProdutoDAO();
+		Produto p = produtoDAO.pesquisarProdutoComParametros(nome, tipo, marca);
+		DAOFactory.close();
+		if (p == null)
+		{
+			return null;
+		}
+		return p;
+	}
 }

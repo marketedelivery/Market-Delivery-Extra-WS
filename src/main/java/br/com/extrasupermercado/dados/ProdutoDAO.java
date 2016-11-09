@@ -83,4 +83,23 @@ public class ProdutoDAO extends DAOGenerico<Produto> implements IProdutoDAO
 			return null;
 		}
 	}
+
+	public Produto pesquisarProdutoComParametros(String nome, String tipo, String marca)
+	{
+		String consulta = "SELECT p FROM Produto p WHERE p.nome =:nome AND p.tipo =:tipo AND p.marca =:marca";
+		TypedQuery<Produto> retorno = getEntityManager().createQuery(consulta, Produto.class);
+		retorno.setParameter("nome", nome);
+		retorno.setParameter("tipo", tipo);
+		retorno.setParameter("marca", marca);
+		Produto resultado;
+		try
+		{
+			resultado = retorno.getSingleResult();
+			return resultado;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
 }
