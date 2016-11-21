@@ -1,5 +1,6 @@
 package br.com.extrasupermercado.negocio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -31,7 +32,6 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/cadastrarProduto")
 	public String cadastrarProduto(Produto produto)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		String mensagem = "";
 		try
@@ -43,7 +43,6 @@ public class ControladorProduto implements IControladorProduto
 		{
 			e.printStackTrace();
 		}
-		DAOFactory.close();
 		return mensagem;
 	}
 
@@ -53,7 +52,6 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/alterarProduto")
 	public String alterarProduto(Produto produto)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		String mensagem = "";
 		try
@@ -65,7 +63,6 @@ public class ControladorProduto implements IControladorProduto
 		{
 			e.printStackTrace();
 		}
-		DAOFactory.close();
 		return mensagem;
 	}
 
@@ -75,15 +72,13 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/consultarTodosProdutos")
 	public List<Produto> consultarTodosProdutos()
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.consultarTodos();
-		DAOFactory.close();
 		if (!lista.isEmpty())
 		{
 			return lista;
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	@GET
@@ -92,13 +87,11 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/pesquisarProdutoPorNome/{nome}")
 	public Produto pesquisarProdutoPorNome(@PathParam("nome") String nome)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoPorNome(nome);
-		DAOFactory.close();
 		if (p == null)
 		{
-			return null;
+			return new Produto();
 		}
 		return p;
 	}
@@ -109,15 +102,13 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/consultarProdutosPorTipo/{tipo}")
 	public List<Produto> consultarProdutosPorTipo(@PathParam("tipo") String tipo)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.consultarProdutosPorTipo(tipo);
-		DAOFactory.close();
 		if (!lista.isEmpty())
 		{
 			return lista;
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	@GET
@@ -126,15 +117,13 @@ public class ControladorProduto implements IControladorProduto
 	@Path("/consultarProdutosPorSupermercado/{supermercado}")
 	public List<Produto> consultarProdutosPorSupermercado(@PathParam("supermercado") int supermercado)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.pesquisarProdutoPorSupermercado(supermercado);
-		DAOFactory.close();
 		if (!lista.isEmpty())
 		{
 			return lista;
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	@GET
@@ -145,13 +134,11 @@ public class ControladorProduto implements IControladorProduto
 	public Produto pesquisarProdutoComParametros(@PathParam("nome") String nome, @PathParam("tipo") String tipo,
 			@PathParam("marca") String marca)
 	{
-		DAOFactory.abrir();
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoComParametros(nome, tipo, marca);
-		DAOFactory.close();
 		if (p == null)
 		{
-			return null;
+			return new Produto();
 		}
 		return p;
 	}

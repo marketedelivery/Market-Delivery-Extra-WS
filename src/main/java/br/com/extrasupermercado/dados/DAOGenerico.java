@@ -8,16 +8,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import br.com.extrasupermercado.interfaces.dados.IDAOGenerico;
+import br.com.marketedelivery.IDAO.IDAOGenerico;
 
+/**
+ * PSC
+ * 
+ * @param <Entidade,
+ *            PK>
+ */
 public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 {
-	// Atributos
 	protected EntityManager entityManager;
 
 	protected Class<Entidade> classePersistente;
 
-	// Construtores
 	@SuppressWarnings("unchecked")
 	public DAOGenerico(EntityManager em)
 	{
@@ -26,7 +30,6 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		classePersistente = (Class<Entidade>) parameterizedType.getActualTypeArguments()[0];
 	}
 
-	// Métodos
 	/**
 	 * Executa o merge do objeto que se encontra em mem�ria.
 	 * 
@@ -50,6 +53,10 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 			{
 				tx.rollback();
 			}
+		}
+		finally
+		{
+			entityManager.close();
 		}
 	}
 
@@ -76,6 +83,10 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 			{
 				tx.rollback();
 			}
+		}
+		finally
+		{
+			entityManager.close();
 		}
 	}
 
@@ -106,6 +117,10 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 				tx.rollback();
 			}
 		}
+		finally
+		{
+			entityManager.close();
+		}
 	}
 
 	/**
@@ -133,6 +148,10 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 				tx.rollback();
 			}
 		}
+		finally
+		{
+			entityManager.close();
+		}
 	}
 
 	/**
@@ -153,6 +172,10 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		{
 			re.printStackTrace();
 		}
+		finally
+		{
+			entityManager.close();
+		}
 		return instance;
 	}
 
@@ -162,11 +185,16 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		{
 			String sql = "from " + classePersistente.getSimpleName();
 			TypedQuery<Entidade> query = entityManager.createQuery(sql, classePersistente);
+			System.out.println(query);
 			return query.getResultList();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+			entityManager.close();
 		}
 		return null;
 	}
@@ -184,10 +212,13 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		{
 			e.printStackTrace();
 		}
+		finally
+		{
+			entityManager.close();
+		}
 		return null;
 	}
 
-	// Gets e Sets
 	/**
 	 * Utilizado para se injetar o Entity manager no DAO.
 	 * 
