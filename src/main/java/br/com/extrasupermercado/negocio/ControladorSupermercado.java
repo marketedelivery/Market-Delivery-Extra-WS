@@ -111,4 +111,20 @@ public class ControladorSupermercado implements IControladorSupermercado
 		}
 		return s;
 	}
+
+	@GET
+	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("/pesquisarSupermercadoPorCNPJ/{cnpj}")
+	@Override
+	public Supermercado pesquisarSupermercadoPorCNPJ(@PathParam("cnpj") String cnpj)
+	{
+		supermercadoDAO = DAOFactory.getSupermercadoDAO();
+		Supermercado s = supermercadoDAO.pesquisarSupermercadoPorCNPJ(cnpj);
+		if (s == null)
+		{
+			return new Supermercado();
+		}
+		return s;
+	}
 }

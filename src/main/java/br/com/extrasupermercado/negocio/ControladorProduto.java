@@ -142,4 +142,36 @@ public class ControladorProduto implements IControladorProduto
 		}
 		return p;
 	}
+
+	@GET
+	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("/pesquisarProdutoComParametrosLista/{nome}, {tipo}, {marca}")
+	@Override
+	public List<Produto> pesquisarProdutoComParametrosLista(@PathParam("nome") String nome,
+			@PathParam("tipo") String tipo, @PathParam("marca") String marca)
+	{
+		produtoDAO = DAOFactory.getProdutoDAO();
+		List<Produto> lista = produtoDAO.pesquisarProdutoComParametrosLista(nome, tipo, marca);
+		if (!lista.isEmpty())
+		{
+			return lista;
+		}
+		return new ArrayList<>();
+	}
+
+	@GET
+	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("retornarProdutoPorNome/{nome}")
+	public List<Produto> retornarProdutoPorNome(@PathParam("nome") String nome)
+	{
+		produtoDAO = DAOFactory.getProdutoDAO();
+		List<Produto> lista = produtoDAO.retornarProdutoPorNome(nome);
+		if (!lista.isEmpty())
+		{
+			return lista;
+		}
+		return new ArrayList<>();
+	}
 }

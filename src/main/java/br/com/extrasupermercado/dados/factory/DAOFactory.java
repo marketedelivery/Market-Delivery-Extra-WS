@@ -24,14 +24,6 @@ public abstract class DAOFactory
 		factory = Persistence.createEntityManagerFactory(UNIT_PERSISTENCE_NAME);
 	}
 
-	public static void abrir()
-	{
-		if (factory == null || !factory.isOpen())
-		{
-			factory = Persistence.createEntityManagerFactory(UNIT_PERSISTENCE_NAME);
-		}
-	}
-
 	// Métodos
 	public static ISupermercadoDAO getSupermercadoDAO()
 	{

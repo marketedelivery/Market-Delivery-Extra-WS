@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import br.com.marketedelivery.IDAO.IDAOGenerico;
+import br.com.extrasupermercado.interfaces.dados.IDAOGenerico;
 
 /**
  * PSC
