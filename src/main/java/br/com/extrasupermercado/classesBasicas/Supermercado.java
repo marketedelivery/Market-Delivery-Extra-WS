@@ -30,19 +30,24 @@ public class Supermercado implements Serializable
 	@Column(name = "longitude")
 	private String longitude;
 
+	@Column(name = "logoimage")
+	private String logoimage;
+
 	// Construtores
 	public Supermercado()
 	{
 		this.nome = "";
 		this.latitude = "";
 		this.longitude = "";
+		this.logoimage = "";
 	}
 
-	public Supermercado(String nome, int codigo)
+	public Supermercado(String nome, int codigo, String logoimage)
 	{
 		super();
 		this.nome = nome;
 		this.codigo = codigo;
+		this.logoimage = logoimage;
 	}
 
 	// Gets e Sets
@@ -84,5 +89,22 @@ public class Supermercado implements Serializable
 	public void setLongitude(String longitude)
 	{
 		this.longitude = longitude;
+	}
+
+	/**
+	 * @return the logoimage
+	 */
+	public String getLogoimage()
+	{
+		return logoimage;
+	}
+
+	/**
+	 * @param logoimage
+	 *            the logoimage to set
+	 */
+	public void setLogoimage(String logoimage)
+	{
+		this.logoimage = logoimage;
 	}
 }
