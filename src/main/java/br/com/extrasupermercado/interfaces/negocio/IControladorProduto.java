@@ -27,9 +27,9 @@ public interface IControladorProduto
 
 	public Response consultarProdutosPorSupermercado(int supermercado);
 
-	public Response pesquisarProdutoComParametros(String nome, String tipo, String marca);
+	public Produto pesquisarProdutoComParametros(String nome, String tipo, String marca);
 
-	public Response pesquisarProdutoComParametrosLista(String nome, String tipo, String marca);
+	public List<Produto> pesquisarProdutoComParametrosLista(String nome, String tipo, String marca);
 
 	public Response retornarProdutoPorNome(String nome);
 }

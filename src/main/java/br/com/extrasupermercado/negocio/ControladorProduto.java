@@ -154,40 +154,33 @@ public class ControladorProduto implements IControladorProduto {
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarProdutoComParametros/{nome}, {tipo}, {marca}")
 	@Override
-	public Response pesquisarProdutoComParametros(@QueryParam("nome") String nome, @QueryParam("tipo") String tipo,
-			@QueryParam("marca") String marca)
+	public Produto pesquisarProdutoComParametros(@PathParam("nome") String nome, @PathParam("tipo") String tipo,
+			@PathParam("marca") String marca)
 	{
-		nome = nome == null ? new String() : nome;
-		tipo = tipo == null ? new String() : tipo;
-		marca = marca == null ? new String() : marca;
-		
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoComParametros(nome, tipo, marca);
-
 		if (p == null)
 		{
-			return Response.ok(new Gson().toJson(new Produto())).build();
+			return new Produto();
 		}
-		return Response.ok(new Gson().toJson(p)).build();
+		return p;
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
-	@Path("/pesquisarProdutoComParametrosLista")
+	@Path("/pesquisarProdutoComParametrosLista/{nome}, {tipo}, {marca}")
 	@Override
-	public Response pesquisarProdutoComParametrosLista(@QueryParam("nome") String nome,
-			@QueryParam("tipo") String tipo, @QueryParam("marca") String marca)
+	public List<Produto> pesquisarProdutoComParametrosLista(@PathParam("nome") String nome,
+			@PathParam("tipo") String tipo, @PathParam("marca") String marca)
 	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.pesquisarProdutoComParametrosLista(nome, tipo, marca);
 		if (!lista.isEmpty())
 		{
-			return Response.ok(new Gson().toJson(lista)).build();
-		}else
-		{
-			return Response.ok(new Gson().toJson(new ArrayList<>())).build();
+			return lista;
 		}
+		return new ArrayList<>();
 	}
 
 	@GET
