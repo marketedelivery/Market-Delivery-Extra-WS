@@ -13,23 +13,23 @@ import br.com.extrasupermercado.classesBasicas.Produto;
 public interface IControladorProduto
 {
 	// Métodos
-	public String cadastrarProduto(Produto produto);
+	public Response cadastrarProduto(Produto produto);
 
-	public String alterarProduto(Produto produto);
+	public Response alterarProduto(Produto produto);
 
-	public List<Produto> consultarTodosProdutos();
+	public Response consultarTodosProdutos();
 	
 	public Response consultarProdutoPorId(@PathParam("id") int produtoID);
 
-	public Produto pesquisarProdutoPorNome(String nome);
+	public Response pesquisarProdutoPorNome(String nome);
 
-	public List<Produto> consultarProdutosPorTipo(String tipo);
+	public Response consultarProdutosPorTipo(String tipo);
 
-	public List<Produto> consultarProdutosPorSupermercado(int supermercado);
+	public Response consultarProdutosPorSupermercado(int supermercado);
 
-	public Produto pesquisarProdutoComParametros(String nome, String tipo, String marca);
+	public Response pesquisarProdutoComParametros(String nome, String tipo, String marca);
 
-	public List<Produto> pesquisarProdutoComParametrosLista(String nome, String tipo, String marca);
+	public Response pesquisarProdutoComParametrosLista(String nome, String tipo, String marca);
 
-	public List<Produto> retornarProdutoPorNome(String nome);
+	public Response retornarProdutoPorNome(String nome);
 }

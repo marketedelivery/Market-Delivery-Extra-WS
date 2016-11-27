@@ -10,7 +10,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+
+import com.google.gson.Gson;
 
 import br.com.extrasupermercado.classesBasicas.Produto;
 import br.com.extrasupermercado.dados.factory.DAOFactory;
@@ -30,39 +33,51 @@ public class ControladorProduto implements IControladorProduto {
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/cadastrarProduto")
-	public String cadastrarProduto(Produto produto) {
+	public Response cadastrarProduto(Produto produto)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		String mensagem = "";
-		try {
+		try
+		{
 			produtoDAO.inserir(produto);
+			
 			mensagem = msg.getMsg_produto_cadastrado_com_sucesso();
-		} catch (Exception e) {
+			return Response.ok(new Gson().toJson(produto)).build();
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
-		return mensagem;
+		return Response.ok(new Gson().toJson(new Produto())).build();
 	}
 
 	@PUT
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/alterarProduto")
-	public String alterarProduto(Produto produto) {
+	public Response alterarProduto(Produto produto)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		String mensagem = "";
-		try {
+		try
+		{
 			produtoDAO.alterar(produto);
 			mensagem = msg.getMsg_produto_alterado_com_sucesso();
-		} catch (Exception e) {
+			return Response.ok(new Gson().toJson(produto)).build();
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
-		return mensagem;
+		return Response.ok(new Gson().toJson(new Produto())).build();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarProdutoPorId/{id}")
-	public Response consultarProdutoPorId(@PathParam("id") int produtoID) {
+	public Response consultarProdutoPorId(@PathParam("id") int produtoID)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto produtoRetorno = produtoDAO.consultarPorId(produtoID);
 		if (produtoRetorno == null) {
@@ -76,52 +91,62 @@ public class ControladorProduto implements IControladorProduto {
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarTodosProdutos")
-	public List<Produto> consultarTodosProdutos() {
+	public Response consultarTodosProdutos()
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.consultarTodos();
-		if (!lista.isEmpty()) {
-			return lista;
+		if(lista == null || lista.isEmpty())
+		{
+			return Response.ok(new Gson().toJson(new Produto())).build();
 		}
-		return new ArrayList<>();
+			
+			return Response.ok(new Gson().toJson(lista)).build();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarProdutoPorNome/{nome}")
-	public Produto pesquisarProdutoPorNome(@PathParam("nome") String nome) {
+	public Response pesquisarProdutoPorNome(@PathParam("nome") String nome)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoPorNome(nome);
-		if (p == null) {
-			return new Produto();
+		if(p != null)
+		{
+			return Response.ok(new Gson().toJson(p)).build();
 		}
-		return p;
+			return Response.ok(new Gson().toJson(new Produto())).build();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarProdutosPorTipo/{tipo}")
-	public List<Produto> consultarProdutosPorTipo(@PathParam("tipo") String tipo) {
+	public Response consultarProdutosPorTipo(@PathParam("tipo") String tipo)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.consultarProdutosPorTipo(tipo);
-		if (!lista.isEmpty()) {
-			return lista;
+		if (lista == null || lista.isEmpty())
+		{
+			
+			return Response.ok(new Gson().toJson(new ArrayList<>())).build();
 		}
-		return new ArrayList<>();
+			return Response.ok(new Gson().toJson(lista)).build();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarProdutosPorSupermercado/{supermercado}")
-	public List<Produto> consultarProdutosPorSupermercado(@PathParam("supermercado") int supermercado) {
+	public Response consultarProdutosPorSupermercado(@PathParam("supermercado") int supermercado)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.pesquisarProdutoPorSupermercado(supermercado);
-		if (!lista.isEmpty()) {
-			return lista;
+		if (lista == null || lista.isEmpty())
+		{	
+			return Response.ok(new Gson().toJson(new ArrayList<>())).build();
 		}
-		return new ArrayList<>();
+			return Response.ok(new Gson().toJson(lista)).build();
 	}
 
 	@GET
@@ -129,41 +154,56 @@ public class ControladorProduto implements IControladorProduto {
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarProdutoComParametros/{nome}, {tipo}, {marca}")
 	@Override
-	public Produto pesquisarProdutoComParametros(@PathParam("nome") String nome, @PathParam("tipo") String tipo,
-			@PathParam("marca") String marca) {
+	public Response pesquisarProdutoComParametros(@QueryParam("nome") String nome, @QueryParam("tipo") String tipo,
+			@QueryParam("marca") String marca)
+	{
+		nome = nome == null ? new String() : nome;
+		tipo = tipo == null ? new String() : tipo;
+		marca = marca == null ? new String() : marca;
+		
 		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoComParametros(nome, tipo, marca);
-		if (p == null) {
-			return new Produto();
+
+		if (p == null)
+		{
+			return Response.ok(new Gson().toJson(new Produto())).build();
 		}
-		return p;
+		return Response.ok(new Gson().toJson(p)).build();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
-	@Path("/pesquisarProdutoComParametrosLista/{nome}, {tipo}, {marca}")
+	@Path("/pesquisarProdutoComParametrosLista")
 	@Override
-	public List<Produto> pesquisarProdutoComParametrosLista(@PathParam("nome") String nome,
-			@PathParam("tipo") String tipo, @PathParam("marca") String marca) {
+	public Response pesquisarProdutoComParametrosLista(@QueryParam("nome") String nome,
+			@QueryParam("tipo") String tipo, @QueryParam("marca") String marca)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.pesquisarProdutoComParametrosLista(nome, tipo, marca);
-		if (!lista.isEmpty()) {
-			return lista;
+		if (!lista.isEmpty())
+		{
+			return Response.ok(new Gson().toJson(lista)).build();
+		}else
+		{
+			return Response.ok(new Gson().toJson(new ArrayList<>())).build();
 		}
-		return new ArrayList<>();
 	}
 
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("retornarProdutoPorNome/{nome}")
-	public List<Produto> retornarProdutoPorNome(@PathParam("nome") String nome) {
+	public Response retornarProdutoPorNome(@PathParam("nome") String nome)
+	{
 		produtoDAO = DAOFactory.getProdutoDAO();
 		List<Produto> lista = produtoDAO.retornarProdutoPorNome(nome);
-		if (!lista.isEmpty()) {
-			return lista;
+		if (!lista.isEmpty())
+		{
+			return Response.ok(new Gson().toJson(lista)).build();
+		}else
+		{
+			return Response.ok(new Gson().toJson(new ArrayList<>())).build();
 		}
-		return new ArrayList<>();
 	}
 }
